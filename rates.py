@@ -1,6 +1,7 @@
 import requests
 
 from config import CBU_TIMEOUT
+from utils import str_to_float
 
 
 def get_rate(currency: str = 'USD') -> float | None:
@@ -12,7 +13,21 @@ def get_rate(currency: str = 'USD') -> float | None:
     if response.status_code == 200:
         data = response.json()
         if len(data) > 0:
-            return float(data[0]['Rate'])
+            rate = str_to_float(data[0]['Rate'])
+            if rate is None:
+                raise ValueError('Rate qiymatini float ga convert qilib bolmadi.')
+            return rate
+
         return None
 
     return None
+
+
+def convert(value: float, from_currency: str, to_currency: str) -> float:
+
+    if to_currency == 'UZS':
+        rate = get_rate(from_currency)
+        return round(value * rate, 2)
+
+    rate = get_rate(to_currency)
+    return round(value / rate, 2)

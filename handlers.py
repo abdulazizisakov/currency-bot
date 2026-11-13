@@ -6,7 +6,15 @@ from config import TOKEN, TG_URL, TG_TIMEOUT
 def get_updates(offset: int | None = None) -> list[dict]:
     url = TG_URL.format(token=TOKEN, method='getUpdates')
 
-    response = requests.get(url, timeout=TG_TIMEOUT)
+    payload = {
+        'offset': offset
+    }
+
+    response = requests.post(
+        url,
+        json=payload,
+        timeout=TG_TIMEOUT
+    )
     response.raise_for_status()
 
     if response.status_code == 200:
@@ -17,7 +25,7 @@ def get_updates(offset: int | None = None) -> list[dict]:
     return []
 
 
-def send_message(chat_id: int | str, text: str, reply_markup: dict) -> None:
+def send_message(chat_id: int | str, text: str, reply_markup: dict = {}) -> None:
     url = TG_URL.format(token=TOKEN, method='sendMessage')
 
     payload = {
