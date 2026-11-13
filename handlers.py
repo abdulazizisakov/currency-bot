@@ -32,17 +32,3 @@ def send_message(chat_id: int | str, text: str, reply_markup: dict) -> None:
         timeout=TG_TIMEOUT
     )
     response.raise_for_status()
-
-
-chat_id = 1258594598
-text = 'Menu'
-reply_markup = {
-    'keyboard': [
-        [{'text': 'Button 00'}],
-        [{'text': 'Button 01'}, {'text': 'Button 02'}],
-        [{'text': 'Button 03'}],
-    ],
-    'resize_keyboard': True,
-    'one_time_keyboard': False
-}
-send_message(chat_id, text, reply_markup)
